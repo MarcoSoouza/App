@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialIcons, FontAwesome5 } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 import { RootStackParamList } from './types';
 import { useFinance } from './AppContext';
 import { useAuth } from './AuthContext';
@@ -25,26 +26,45 @@ export default function HomeScreen({ navigation }: Props) {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-            <Feather name="log-out" size={24} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
-        <Text style={styles.title}>Gestão Financeira</Text>
-        <Text style={styles.subtitle}>Organize suas dívidas e transações</Text>
+        <LinearGradient
+          colors={['#6366f1', '#8b5cf6', '#a855f7']}
+          style={styles.headerGradient}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <View style={styles.headerTop}>
+            <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+              <Feather name="log-out" size={24} color="#FFFFFF" />
+            </TouchableOpacity>
+          </View>
+          <Text style={styles.title}>Gestão Financeira</Text>
+          <Text style={styles.subtitle}>Organize suas dívidas e transações</Text>
+        </LinearGradient>
       </View>
 
       <View style={styles.summaryContainer}>
-        <View style={styles.summaryCard}>
+        <LinearGradient
+          colors={['#ffffff', '#f8fafc']}
+          style={styles.summaryCard}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <MaterialIcons name="account-balance-wallet" size={32} color="#6366f1" />
           <Text style={styles.summaryLabel}>Total de Dívidas</Text>
           <Text style={styles.summaryValue}>R$ {totalDebts.toFixed(2)}</Text>
-        </View>
-        <View style={styles.summaryCard}>
+        </LinearGradient>
+        <LinearGradient
+          colors={['#ffffff', '#f8fafc']}
+          style={styles.summaryCard}
+          start={{ x: 0, y: 0 }}
+          end={{ x: 1, y: 1 }}
+        >
+          <FontAwesome5 name="balance-scale" size={32} color={netBalance >= 0 ? '#10b981' : '#ef4444'} />
           <Text style={styles.summaryLabel}>Saldo Líquido</Text>
           <Text style={[styles.summaryValue, netBalance >= 0 ? styles.positive : styles.negative]}>
             R$ {netBalance.toFixed(2)}
           </Text>
-        </View>
+        </LinearGradient>
       </View>
 
       <View style={styles.buttonContainer}>
@@ -52,28 +72,40 @@ export default function HomeScreen({ navigation }: Props) {
           style={styles.button}
           onPress={() => navigation.navigate('DebtList')}
         >
-          <Text style={styles.buttonText}>Ver Dívidas</Text>
+          <View style={styles.buttonContent}>
+            <MaterialIcons name="list" size={20} color="#FFFFFF" />
+            <Text style={styles.buttonText}>Ver Dívidas</Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, styles.buttonOutline]}
           onPress={() => navigation.navigate('TransactionList')}
         >
-          <Text style={[styles.buttonText, styles.buttonOutlineText]}>Ver Transações</Text>
+          <View style={styles.buttonContent}>
+            <FontAwesome5 name="exchange-alt" size={20} color="#6366f1" />
+            <Text style={[styles.buttonText, styles.buttonOutlineText]}>Ver Transações</Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={styles.button}
           onPress={() => navigation.navigate('AddDebt')}
         >
-          <Text style={styles.buttonText}>Adicionar Dívida</Text>
+          <View style={styles.buttonContent}>
+            <MaterialIcons name="add" size={20} color="#FFFFFF" />
+            <Text style={styles.buttonText}>Adicionar Dívida</Text>
+          </View>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[styles.button, styles.buttonOutline]}
           onPress={() => navigation.navigate('AddTransaction')}
         >
-          <Text style={[styles.buttonText, styles.buttonOutlineText]}>Adicionar Transação</Text>
+          <View style={styles.buttonContent}>
+            <FontAwesome5 name="plus-circle" size={20} color="#6366f1" />
+            <Text style={[styles.buttonText, styles.buttonOutlineText]}>Adicionar transações</Text>
+          </View>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -91,6 +123,15 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
     paddingHorizontal: 20,
     alignItems: 'center',
+    borderBottomLeftRadius: 25,
+    borderBottomRightRadius: 25,
+  },
+  headerGradient: {
+    width: '100%',
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingBottom: 30,
+    paddingHorizontal: 20,
     borderBottomLeftRadius: 25,
     borderBottomRightRadius: 25,
   },
@@ -189,5 +230,10 @@ const styles = StyleSheet.create({
   },
   buttonOutlineText: {
     color: '#6366f1',
+  },
+  buttonContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
